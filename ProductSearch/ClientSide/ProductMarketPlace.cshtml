@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "Product Market Place";
+    Layout = "~/Views/Shared/_NewUnauthenticated_Layout.cshtml";
+
+}
+@* this container div clears the page header. Found in custom css. *@
+<div class="unauthenticatedview-container">
+    <div class="page-content-wrap" ng-controller="productMarketPlaceController as prodCtrler">
+        <div class="row">
+
+            <!-- START FORM -->
+            <div class="col-md-6 searchReferenceColumn lean-right">
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong>Search Products</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Category</label>
+                                <div class="col-lg-9">
+                                    <select class="form-control" chosen ng-model="prodCtrler.category" ng-options="key as value for (key, value) in prodCtrler.sampleCatalog">
+                                        <!-- this line is used to avoid a strange off-by-one error from angular chosen-->
+                                        <option value=""></option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Keyword</label>
+                                <div class="col-lg-4">
+                                    <input type="text" name="search" ng-model="prodCtrler.searchQuery" placeholder="Search..." />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label"> Radius</label>
+                                <div class="col-lg-5">
+                                    <select class="form-control" chosen ng-model="prodCtrler.radius" ng-options="radius.radius as radius.name for radius in prodCtrler.productRadius track by radius.radius"> </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label"> Zipcode</label>
+                                <div class="col-lg-2">
+                                    <input placeholder="37363" ng-model="prodCtrler.zipcode" ng-blur="prodCtrler.getLatLngByZip();" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-footer btn-toolbar">
+                            <button class="btn btn-success pull-right sm-margin" ng-click="prodCtrler.searchProducts();  ">Search</button>
+                            <button class="btn btn-success pull-right sm-margin" ng-click="prodCtrler.renderProducts(); ">Show All Products</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- END FORM -->
+        </div>
+
+        <div ng-cloak class="container market" ng-repeat="thisProduct in prodCtrler.items | filter:prodItems">
+            <!-- START SIMPLE DATATABLE -->
+
+
+
+
+            <div class="col-md-12 tableReferenceColumn">
+                <div class="panel panel-primary panelQuoteRequest">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a href="#"><strong>{{thisProduct.name}}</strong></a></h3>
+
+
+
+                    </div>
+                    <div class="panel-body">
+                        <button class="btn btn-primary pull-right" ng-click="prodCtrler.redirectToLogin();">Click for more Info</button>
+
+
+                        <div class="col-md-12 panel-default panelDetails">
+                            <div class="panel-body-details row">
+
+                                <div class="row">
+
+                                    <div class="col-md-5">
+                                        <div class="panel-group ">
+                                            <img src="~/content/theme/images/constructionmaterials.jpg" class="img-responsive" alt="John Doe" />
+                                        </div>
+
+
+                                        <!-- START GOOGLE MAP WITH MARKER -->
+                                        <div class="panel-group panel-body-map">
+                                            <div class="map_display_ProductMarketPlace"
+                                                 id="map_display_{{thisProduct.productId}}"
+                                                 data-latitude="{{thisProduct.latitude}}"
+                                                 data-longitude="{{thisProduct.longitude}}"
+                                                 style="height: 250px; width: 100%"></div>
+                                        </div>
+                                        <!-- END GOOGLE MAP WITH MARKER -->
+
+
+                                        <div class="panel-body">
+                                            <h3><span class="fa fa-map-marker"></span> {{thisProduct.address1}}</h3>
+                                            <p>{{thisProduct.city}}, {{thisProduct.state}}, {{thisProduct.zipCode}}</p>
+                                        </div>
+
+
+                                        <div class="panel-group">
+                                            <h3><span class="fa fa-map-marker"></span> </h3>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        <div class="panel-group ">
+                                            <h3><label class="control-label"><u>Category</u></label></h3>
+                                            <div class="panel-estimation">
+                                                <span>{{thisProduct.category}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group ">
+                                            <h3><label class="control-label"><u>Description</u></label></h3>
+                                            <div class="panel-due-date">
+                                                <span>{{thisProduct.description}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group ">
+                                            <h3><label class="control-label"><u>Quantity</u></label></h3>
+                                            <div class="panel-status">
+                                                <span>{{thisProduct.quantity}} units</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group ">
+                                            <h3><label class="control-label"><u>Proximity</u></label></h3>
+                                            <div class="panel-status">
+                                                <span>{{thisProduct.distance_in_mi}} miles from your location</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group">
+                                            <h3><label class="control-label"><u>CategoryId</u></label></h3>
+                                            <div class="panel-status">
+                                                <span>{{thisProduct.categoryId}}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-group">
+                                            <h3><label class="control-label"><u>Latitude</u></label></h3>
+                                            <div class="panel-status">
+                                                <span>{{thisProduct.latitude}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="panel-group">
+                                            <h3><label class="control-label"><u>Longitude</u></label></h3>
+                                            <div class="panel-status">
+                                                <span>{{thisProduct.longitude}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- END SIMPLE DATATABLE -->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section pageInitScripts {
+
+    <script src="~/Scripts/resources/mf.js"></script>
+    <script src="~/Scripts/bower_components/chosen/chosen.jquery.js"></script>
+    <script src="~/Scripts/bower_components/angular-chosen-localytics/dist/angular-chosen.min.js"></script>
+    <script src="~/Scripts/app/Modules/sabio.module.ngChosen.js"></script>
+}
+
+
+@section Scripts {
+    <!-- Javascript Extensions-->
+    <div>
+
+        @*<script src="~/Scripts/bootstrap-file-input.js"></script>*@
+        <script src="~/Scripts/sabio.services.productMarketPlace.js"></script>
+        <script src="~/Scripts/app/ProductMarketPlace/Services/ProductMarketPlaceServiceFactory.js"></script>
+        <script src="~/Scripts/app/ProductMarketPlace/Controllers/ProductMarketPlaceController.js"></script>
+        <script src="~/Scripts/sabio.services.addresses.js"></script>
+        <script src="~/Scripts/app/Addresses/Services/addressApiService.js"></script>
+
+        <script src="~/Scripts/Theme/bootstrap-select.js"></script>
+
+
+        <script src="~/Scripts/sabio.services.googlemaps.js"></script>
+        @*<script src="~/Scripts/app/Addresses/Services/googleMapService.js"></script>*@
+
+        <script src="~/Scripts/app/Addresses/Services/googleMapServiceTemp.js"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzti6Y2roH_pn68PaXEhG4bkl4BZK15cw&callback">
+        </script>
+
+
+    </div>
+
+}
+
