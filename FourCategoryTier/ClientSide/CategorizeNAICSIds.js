@@ -3,8 +3,6 @@
 project.category = project.category || {};
 project.category.tiers = project.category.tiers || {};
 
-
-
 project.category.tiers.categorizeTiers = function(currentCode) {
   var currentTier = findTier(currentCode, 1000000);
   console.log('current tier is', currentTier);
@@ -27,7 +25,6 @@ project.category.tiers.categorizeTiers = function(currentCode) {
 
 }
 
-
 function findTier(currentCode, divisor) {
   if (!divisor) {
     divisor = 1000000;
@@ -45,8 +42,6 @@ function findTier(currentCode, divisor) {
   }
 
 }
-
-
 
 function storeTiers(tiersArray) {
   var tiersObject = {};
