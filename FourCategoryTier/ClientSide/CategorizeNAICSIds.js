@@ -1,4 +1,30 @@
-// Algorithm Separting NAICS Codes into Four General Categories. 
+/*
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ This Algorithm Separting NAICS Codes into Four General Categories: Industry Group, Industry, Sector, Subsector. 
+
+
+Example:
+
+
+Input = > 48121316; 
+
+Output = >
+
+  {
+
+  1: 48000000 // Industry Group          
+  2: 48120000 // Industry 
+  3: 48121300 // Sector
+  4: 48121316 // Subsector
+  
+  };
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+*/
+
 
 project.category = project.category || {};
 project.category.tiers = project.category.tiers || {};
@@ -60,9 +86,10 @@ function storeTiers(tiersArray) {
 
 
 /*
-Example:
 
-  Output = 
+Input = > 48121316 
+
+Output = 
 
   {
 
@@ -80,4 +107,5 @@ Example:
   4: 48121316 ->  48 x 100^0  (4-0) i.e. 2 is the exponent
 
 */
+
 

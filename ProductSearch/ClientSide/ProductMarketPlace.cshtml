@@ -1,64 +1,4 @@
-﻿
-@{
-    ViewBag.Title = "Product Market Place";
-    Layout = "~/Views/Shared/_NewUnauthenticated_Layout.cshtml";
 
-}
-@* this container div clears the page header. Found in custom css. *@
-<div class="unauthenticatedview-container">
-    <div class="page-content-wrap" ng-controller="productMarketPlaceController as prodCtrler">
-        <div class="row">
-
-            <!-- START FORM -->
-            <div class="col-md-6 searchReferenceColumn lean-right">
-                <form class="form-horizontal">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Search Products</strong></h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Category</label>
-                                <div class="col-lg-9">
-                                    <select class="form-control" chosen ng-model="prodCtrler.category" ng-options="key as value for (key, value) in prodCtrler.sampleCatalog">
-                                        <!-- this line is used to avoid a strange off-by-one error from angular chosen-->
-                                        <option value=""></option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Keyword</label>
-                                <div class="col-lg-4">
-                                    <input type="text" name="search" ng-model="prodCtrler.searchQuery" placeholder="Search..." />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label"> Radius</label>
-                                <div class="col-lg-5">
-                                    <select class="form-control" chosen ng-model="prodCtrler.radius" ng-options="radius.radius as radius.name for radius in prodCtrler.productRadius track by radius.radius"> </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label"> Zipcode</label>
-                                <div class="col-lg-2">
-                                    <input placeholder="37363" ng-model="prodCtrler.zipcode" ng-blur="prodCtrler.getLatLngByZip();" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="panel-footer btn-toolbar">
-                            <button class="btn btn-success pull-right sm-margin" ng-click="prodCtrler.searchProducts();  ">Search</button>
-                            <button class="btn btn-success pull-right sm-margin" ng-click="prodCtrler.renderProducts(); ">Show All Products</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <!-- END FORM -->
-        </div>
 
         <div ng-cloak class="container market" ng-repeat="thisProduct in prodCtrler.items | filter:prodItems">
             <!-- START SIMPLE DATATABLE -->
@@ -171,48 +111,6 @@
                 </div>
             </div>
             <!-- END SIMPLE DATATABLE -->
-        </div>
-    </div>
-</div>
 
 
-
-
-
-
-@section pageInitScripts {
-
-    <script src="~/Scripts/resources/mf.js"></script>
-    <script src="~/Scripts/bower_components/chosen/chosen.jquery.js"></script>
-    <script src="~/Scripts/bower_components/angular-chosen-localytics/dist/angular-chosen.min.js"></script>
-    <script src="~/Scripts/app/Modules/sabio.module.ngChosen.js"></script>
-}
-
-
-@section Scripts {
-    <!-- Javascript Extensions-->
-    <div>
-
-        @*<script src="~/Scripts/bootstrap-file-input.js"></script>*@
-        <script src="~/Scripts/sabio.services.productMarketPlace.js"></script>
-        <script src="~/Scripts/app/ProductMarketPlace/Services/ProductMarketPlaceServiceFactory.js"></script>
-        <script src="~/Scripts/app/ProductMarketPlace/Controllers/ProductMarketPlaceController.js"></script>
-        <script src="~/Scripts/sabio.services.addresses.js"></script>
-        <script src="~/Scripts/app/Addresses/Services/addressApiService.js"></script>
-
-        <script src="~/Scripts/Theme/bootstrap-select.js"></script>
-
-
-        <script src="~/Scripts/sabio.services.googlemaps.js"></script>
-        @*<script src="~/Scripts/app/Addresses/Services/googleMapService.js"></script>*@
-
-        <script src="~/Scripts/app/Addresses/Services/googleMapServiceTemp.js"></script>
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzti6Y2roH_pn68PaXEhG4bkl4BZK15cw&callback">
-        </script>
-
-
-    </div>
-
-}
 
