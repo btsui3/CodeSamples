@@ -1,0 +1,103 @@
+﻿ <!-- Modal Edit Form -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" ng-click="mc.cancel()">&times;</span></button>
+    <h1 class="modal-title">Edit Company Profile</h1>
+</div>
+<div class="modal-body">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>Company Profile</h3>
+            <form name="companyForm" class="form-horizontal" role="form" ng-submit="mc.submitForm(companyForm.$valid)" novalidate>
+                <div class="form-group" ng-class="{'has-error' : companyForm.name.$invalid && !companyForm.name.$pristine }">
+                    <label class="col-md-3 control-label">Company Name</label>
+                    <div class="col-md-9">
+                        <input type="text" name="name" class="form-control" id="edit_modal_company_name" ng-model="mc.modalItems.name" required />
+                        <p ng-show="companyForm.name.$invalid && !companyForm.name.$pristine" class="help-block">A company name is required.</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Phone Number</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="edit_modal_phone_number" ng-model="mc.modalItems.phone" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Fax Number</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="edit_modal_fax_number" ng-model="mc.modalItems.fax" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Email</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="edit_modal_email" ng-model="mc.modalItems.email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Website</label>
+                   
+                     <div class="col-md-9">
+                        <input type="text" class="form-control" id="edit_modal_fax_number" ng-model="mc.modalItems.url" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label type-of-company">Type of Company<br /><small>Check all (if any) that apply</small></label>
+                    <div class="col-md-4">
+
+                        <label>
+                            <input type="checkbox" ng-model="mc.smallBusiness" ng-click="mc.changeBadge($event, 'smallBusinessOwnedURL', '/Content/Theme/img/companyType/Small-Business-48.png', '/Content/Theme/img/companyType/Small-Business-48-grey.png')" ng-checked="{{mc.companyDesignations.smallBusiness}}" ng-true-value="1" ng-false-value="0">
+                            <img class="type-of-company-modal" ng-src="{{mc.smallBusinessOwnedURL}}" /> 
+                            Small Business
+                        </label>
+                        <label>
+                            <input type="checkbox" ng-model="mc.veteranOwned" ng-click="mc.changeBadge($event,  'veteranOwnedURL', '/Content/Theme/img/companyType/Medal-48.png', '/Content/Theme/img/companyType/Medal-48-grey.png')" ng-checked="{{mc.companyDesignations.veteranOwned}}" ng-true-value="2" ng-false-value="0">
+                            <img class="type-of-company-modal" ng-src="{{mc.veteranOwnedURL}}" /> 
+                            Veteran Owned
+                        </label>
+                        <label>
+                            <input type="checkbox" ng-model="mc.minorityOwned" ng-click="mc.changeBadge($event, 'minorityOwnedURL', '/Content/Theme/img/companyType/Racism-48.png', '/Content/Theme/img/companyType/Racism-48-grey.png')" ng-checked="{{mc.companyDesignations.minorityOwned}}" ng-true-value="4" ng-false-value="0">
+                            <img class="type-of-company-modal" ng-src="{{mc.minorityOwnedURL}}" />  
+                            Minority Owned
+                        </label>
+                        <label>
+                            <input type="checkbox" ng-model="mc.womenOwned" ng-click="mc.changeBadge($event, 'womenOwnedURL', '/Content/Theme/img/companyType/Female-48.png', '/Content/Theme/img/companyType/Female-48-grey.png')" ng-checked="{{mc.companyDesignations.womenOwned}}" ng-true-value="8" ng-false-value="0">
+                            <img class="type-of-company" ng-src="{{mc.womenOwnedURL}}" />
+                            Women Owned
+                        </label>
+                        <br />
+
+                    </div>
+
+                </div>
+            </form>
+
+
+            <br />
+            <div class="col-md-10 col-md-offset-1">
+                <form action="/api/media/upload" class="dropzone"
+                      method="post"
+                      enctype="multipart/form-data"
+                      ng-dropzone dropzone="mc.dropzone"
+                      dropzone-config="mc.dropzoneConfig"
+                      id="companyLogoDropzoneCompany"
+                      event-handlers="{ 'sending': mc.onDropzoneSending, 'success': mc.onDropzoneSuccess }">
+
+                    <div class="fallback">
+                        <input name="file" type="file" multiple="" /><br />
+                    </div>
+
+                    <div class="dzc-message text-center" data-mc-message>
+                        <h1><i class="fa fa-arrow-circle-o-up"></i></h1>
+                        <h3><strong>Drag and drop</strong> (or click) to upload file</h3>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="mc.cancel()">Cancel</button>
+    <button type="button" class="btn btn-primary" id="submit_modal_button" data-dismiss="modal" ng-disabled="companyForm.$invalid" ng-click="mc.submitCompanyEdit()">Submit</button>
+</div>

@@ -1,0 +1,353 @@
+﻿@model project.Web.Models.ViewModels.BaseViewModel
+@{
+    ViewBag.Title = "User Profile";
+
+}
+
+@section Meta{
+    <link href="~/Content/dropzone.css" rel="stylesheet" />
+}
+
+@*FIXME: These should be relocated to the layout*@
+<link href="~/Content/animate.css" rel="stylesheet" />
+<link href="~/Content/dropzone.css" rel="stylesheet" />
+<link href="~/Content/Theme/CSS/introjs.min.css" rel="stylesheet" />
+
+<!-- END WIDGETS -->
+<!-- PROFILE -->
+<div class="row">
+    <div class="col-md-3">
+
+        <!-- Company Profile -->
+        <div class="panel panel-default" ng-cloak ng-controller="companyProfileController as CompProf">
+            <div class="panel-body profile" style="background: url('../../Content/Theme/Images/company_profile_background.jpg') center center no-repeat;">
+                <div class="profile-image">
+                    <img class="company-profile-pic" ng-src="{{CompProf.logoUrl}}" alt="" />
+                </div>
+                <div class="profile-data">
+                    <div class="profile-data-name color-white">{{CompProf.item.name}}</div>
+                    <div class="profile-data-title color-white">{{CompProf.item.phone}}</div>
+                    <div class="profile-data-companyRole color-white">{{CompProf.companyRole}}</div>
+
+                    <img class="type-of-company" ng-src="{{CompProf.item.designationURLS.smallBusinessURL}}" />
+                    <img class="type-of-company" ng-src="{{CompProf.item.designationURLS.veteranOwnedURL}}" />
+                    <img class="type-of-company" ng-src="{{CompProf.item.designationURLS.minorityOwnedURL}}" />
+                    <img class="type-of-company" ng-src="{{CompProf.item.designationURLS.womenOwnedURL}}" />
+
+                </div>
+                <div class="profile-controls">
+                    @if (Model._Owner)
+                    {
+                        <a href="#" class="profile-control-right setting-button" ng-click="CompProf.openEditModal()"><span class="fa fa-cog"></span></a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile -->
+        <div class="panel panel-default" ng-controller="userProfileApiController as upac" ng-cloak>
+            <div class="panel-body profile" style="background: url('../../Content/Theme/Images/user_profile_background.jpg') center center no-repeat;">
+                <div class="profile-image">
+                    <img class="user-profile-pic" ng-src="{{upac.url}}" alt="" />
+                </div>
+                <div class="profile-data">
+                    <div class="">{{upac.item.firstName}} {{upac.item.lastName}}</div>
+                    <div class="proflie-data-companyRole">{{upac.companyRole}}</div>
+                    <div class="profile-data-title" style="color: #FFF;">{{upac.companyName}}</div>
+                </div>
+                <div class="profile-controls">
+                    <a href="#" class="profile-control-right setting-button" ng-click="upac.openModal()"><span class="fa fa-cog"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+
+
+        <div class="panel panel-default">
+
+
+            <div ng-controller="profilePageNotificationController as PPnotificationC" ng-cloak id="notification_list">
+                <div class="panel-heading" ng-class="{noNotifications: PPnotificationC.notifications == null}">
+                    <div class="panel-title-box">
+                        <h3><span ng-if="PPnotificationC.notifications == null" id="no_notification_span">No </span>Notifications</h3>
+                        <span ng-if="PPnotificationC.notifications != null">{{PPnotificationC.unreadNotifications.length}}<span ng-if="PPnotificationC.unreadNotifications == null">0</span> Unread <span ng-if="PPnotificationC.unreadNotifications.length !== 1">Notifications</span><span ng-if="PPnotificationC.unreadNotifications.length == 1">Notification</span></span>
+                        <div ng-if="PPnotificationC.notifications != null" id="notification_header_button_div">
+                            <button type="button" class="btn btn-warning notification-button" ng-click="PPnotificationC.selectAllCheckBoxes()">Check All</button>
+                            <button type="button" class="btn btn-success notification-button" ng-click="PPnotificationC.uncheckAllCheckBoxes()">Uncheck All</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" ng-if="PPnotificationC.notifications != null" ng-class="{hasNotifications: PPnotificationC.notifications != null}">
+                    <div class="table-responsive" id="notification_table" style="height: 223px; overflow-y: auto;">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr ng-repeat="notification in PPnotificationC.notifications | orderBy:'-'">
+                                    <td ng-class="{isRead: notification.is_Read == true, notRead: notification.is_Read == false}">
+                                        <input type="checkbox" name="selectedNotifications[]" ng-model="notification.selected" />
+                                    </td>
+                                    <td ng-class="{isRead: notification.is_Read == true, notRead: notification.is_Read == false}">
+                                        <div>
+                                            <u>{{notification.dateCreated | date: 'M-dd HH:mm'}}</u>
+                                        </div>
+                                        <div>
+                                            {{notification.message1}} <a href="{{notification.link}}"><u>{{notification.message2}}</u></a> {{notification.message3}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="notification_footer_button_div">
+                        <button type="button" class="btn btn-info notification-button" ng-click="PPnotificationC.markAsReadCheckedNotifications()">Mark As Read</button>
+                        <button type="button" class="btn btn-primary notification-button" ng-click="PPnotificationC.deleteCheckedNotifications()">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MESSAGES ITEM -->
+        <div class="panel panel-default">
+
+                   <div class="panel-heading">
+                <div class="panel-title-box">
+                    <h3>Messages</h3>
+                    <span>Recent Conversations</span>
+                </div>
+            </div>
+            <div class="panel-body" id="message_right_frame_profile_page">
+                <div class="row">
+                    <div class="col-md-8 conversation-messages">
+                        <div class="content-frame-body content-frame-body-left" ng-cloak ng-controller="messageController as mc">
+                            <div ng-view></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 conversation-messages">
+                        <div class="list-group list-group-contacts conversation-list" ng-controller="conversationController as cc">
+                            <div ng-repeat="conversationItem in cc.conversationItems | orderBy: 'isRead'">
+                                <!-- CONTACT IS SENDER -->
+                                <a ng-href="#/{{conversationItem.conversationId}}/{{conversationItem.receiverId}}" ng-if="cc.currentUserId == conversationItem.senderId" class="list-group-item conversation-items" data-conversationId="{{conversationItem.conversationId}}">
+                                    <img ng-if="!conversationItem.receiverUrl" ng-src="https://cdn1.iconfinder.com/data/icons/social-messaging-productivity-1/128/profile2-128.png" class="pull-left" id="user_image_url" alt="">
+                                    <img ng-if="conversationItem.receiverUrl" ng-src="{{conversationItem.receiverUrl}}" class="pull-left" id="user_image_url" alt="">
+                                    <span class="contacts-title inline-block" data-messageReceiverId="{{conversationItem.receiverId}}">{{conversationItem.receiverFullName}}</span>
+                                    <p ng-if="!conversationItem.isRead" class="inline-block">
+                                        <span class="fa fa-circle text-danger"></span>
+                                    </p>
+                                    <p class="company-name">{{conversationItem.receiverCompanyName }}</p>
+                                </a>
+                                <!-- END CONTACT IS SENDER -->
+                                <!-- CONTACT IS NOT SENDER -->
+                                <a ng-href="#/{{conversationItem.conversationId}}/{{conversationItem.senderId}}" ng-if="cc.currentUserId !== conversationItem.senderId" class="list-group-item conversation-items" data-conversationId="{{conversationItem.conversationId}}">
+                                    <img ng-if="!conversationItem.receiverUrl" ng-src="https://cdn1.iconfinder.com/data/icons/social-messaging-productivity-1/128/profile2-128.png" class="pull-left" id="user_image_url" alt="">
+                                    <img ng-if="conversationItem.receiverUrl" ng-src="{{conversationItem.senderUrl}}" class="pull-left" id="user_image_url" alt="">
+                                    <span class="contacts-title" data-messageReceiverId="{{conversationItem.senderId}}">{{conversationItem.senderFullName}}</span>
+                                    <p ng-if="!conversationItem.isRead" class="inline-block">
+                                        <span class="fa fa-circle text-danger"></span>
+                                    </p>
+                                    <p class="company-name">{{conversationItem.senderCompanyName }}</p>
+
+                                </a>
+                                <!-- END CONTACT IS NOT SENDER -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+
+        <!-- START SALES & EVENTS BLOCK -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title-box">
+                    <h3>Sales & Event</h3>
+                    <span>Event "Purchase Button"</span>
+                </div>
+                <ul class="panel-controls" style="margin-top: 2px;">
+                    <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                    <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                            <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body padding-0">
+                <div class="chart-holder" id="dashboard-line-1" style="height: 200px;"></div>
+            </div>
+        </div>
+        <!-- END SALES & EVENTS BLOCK -->
+
+    </div>
+    <div class="col-md-4">
+
+        <!-- START USERS ACTIVITY BLOCK -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title-box">
+                    <h3>Users Activity</h3>
+                    <span>Users vs returning</span>
+                </div>
+                <ul class="panel-controls" style="margin-top: 2px;">
+                    <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                    <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                            <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body padding-0">
+                <div class="chart-holder" id="dashboard-bar-1" style="height: 200px;"></div>
+            </div>
+        </div>
+        <!-- END USERS ACTIVITY BLOCK -->
+
+    </div>
+    <div class="col-md-4">
+
+        <!-- START VISITORS BLOCK -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title-box">
+                    <h3>Visitors</h3>
+                    <span>Visitors (last month)</span>
+                </div>
+                <ul class="panel-controls" style="margin-top: 2px;">
+                    <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                    <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                            <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body padding-0">
+                <div class="chart-holder" id="dashboard-donut-1" style="height: 200px;"></div>
+            </div>
+        </div>
+        <!-- END VISITORS BLOCK -->
+
+    </div>
+</div>
+
+<!-- START DASHBOARD CHART -->
+<div class="block-full-width">
+    <div id="dashboard-chart" style="height: 250px; width: 100%; float: left;"></div>
+    <div class="chart-legend">
+        <div id="dashboard-legend"></div>
+    </div>
+</div>
+<!-- END DASHBOARD CHART -->
+
+
+@section pageInItScripts {
+    <script src="~/Scripts/dropzonejs/dropzone.js"></script>
+    <script src="~/Scripts/bower_components/angular-dropzone/lib/angular-dropzone.js"></script>
+    <script src="~/Scripts/app/Modules/project.module.ngDropzone.js"></script>
+    <script src="~/Scripts/bower_components/chosen/chosen.jquery.js"></script>
+    <script src="~/Scripts/bower_components/angular-chosen-localytics/dist/angular-chosen.min.js"></script>
+    <script src="~/Scripts/app/Modules/project.module.ngChosen.js"></script>
+}
+
+@section Scripts{
+
+    <script src="~/Scripts/Angular-app-module.js"></script>
+    <script src="~/Scripts/intro.min.js"></script>
+
+    <!-- project root file -->
+    <script src="~/Scripts/modernizr.js"></script>
+    <script src="~/Scripts/bootstrap-file-input.js"></script>
+    <script src="~/Scripts/project.services.userprofile.js"></script>
+
+    @* Startup jQuery *@
+    <script type="text/javascript">
+        (function () {
+
+            // Ensure namespace exists.
+            project.services = project.services || {};
+
+            // StartUp values
+            project.p = {
+                profileModal: "#cProfile_modal",
+                companyId: $("#PAGECOMPANY").val(),
+                companyRole: $("#COMPANYROLE").val(),
+                companyOwnerId: $("#COMPANYOWNERID").val(),
+                companyAddress: $("#COMPANYADDRESSSTRING").val(),
+                companyRole: $("#COMPANYROLE").val(),
+                companyPhotoUrl: $("#COMPANYPHOTOURL").val(),
+                currentUserId: $("#PAGEUSER").val(),
+                address: "130 Newport Center Dr., Newport Beach, CA 92660",
+                btnEditModal: "#edit_modal_icon"
+            };
+
+            // If company has address, update the default.
+            if (project.p.companyAddress != "") {
+                project.p.address = project.p.companyAddress;
+            }
+
+            // Log init values to verify crucial server data is coming through
+            //console.log("Company id: ", project.p.companyId);
+            //console.log("Page company address : ", project.p.address);
+
+        })();
+    </script>
+
+
+    <!-- COMPANY PROFILE API -->
+    <script src="~/Scripts/project.services.companyProfile.js"></script>
+    <script src="~/Scripts/app/Company/Services/companyProfileApiService.js"></script>
+
+    <!-- MEDIA API -->
+    <script src="~/Scripts/project.services.media.js"></script>
+    <script src="~/Scripts/app/Media/Services/mediaApiService.js"></script>
+
+    <!-- Controllers -->
+    <script src="~/Scripts/app/Company/Controllers/companyProfile.js"></script>
+    <script src="~/Scripts/app/Company/Controllers/editCompanyProfileModal.js"></script>
+
+    <!--######################################################################################-->
+    <!--USER SERVICE-->
+    <script src="~/Scripts/app/UserProfile/Services/UserServiceFactory.js"></script>
+
+    <!--USER CONTROLLERS-->
+    <script src="~/Scripts/app/UserProfile/Controllers/UserProfileApiController.js"></script>
+    <script src="~/Scripts/app/UserProfile/Controllers/EditUserProfileModalController.js"></script>
+
+    <script src="~/Scripts/project.services.companyDesignations.js"></script>
+    <script src="~/Scripts/app/Company/Services/companyDesignationsService.js"></script>
+
+    <!-- MESSAGES SCRIPTS -->
+    <script src="~/Scripts/project.services.conversations.js"></script>
+    <script src="~/Scripts/project.services.messages.js"></script>
+    <script src="~/Scripts/project.services.botConversation.js"></script>
+    <script src="~/Scripts/app/Messages/Services/botConversationService.js"></script>
+
+    <script src="~/Scripts/app/Messages/Config/messageRouteConfig.js"></script>
+    <script src="~/Scripts/app/Messages/Services/messagingService.js"></script>
+    <script src="~/Scripts/app/Messages/Controllers/messageController.js"></script>
+    <script src="~/Scripts/app/Messages/Controllers/conversationController.js"></script>
+    <script src="~/Scripts/app/Messages/Controllers/contactsModalController.js"></script>
+    <script src="~/Scripts/app/Notifications/Controllers/profilePageNotificationController.js"></script>
+
+
+}
