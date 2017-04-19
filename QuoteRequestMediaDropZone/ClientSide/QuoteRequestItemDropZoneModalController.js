@@ -26,8 +26,6 @@
 
         vm.$scope = $scope;
 
-
-
         vm.$uibModalInstance = $uibModalInstance;
         vm.$quoterequestItemService = $quoterequestItemService;
         vm.$QRmediaService = $QRmediaService;
@@ -35,17 +33,9 @@
         vm.QrDropZoneItem = QrDropZoneItem;
         vm.onQRDropzoneSending = _onQRDropzoneSending;
         vm.onQRDropzoneSuccess = _onQRDropzoneSuccess;
-
         vm.onQRMediaSuccess = _onQRMediaSuccess;
-
         vm.quoteRequestItemId = null;
-
         vm.userId = $("#PAGEUSER").val();
-        vm.quoteRequestId = $('#quote_request_id').val();
-        //vm.selectedQuoteRequestId = project.p.selectedQuoteRequestId;
-        
-        
-        
 
         vm.notify = vm.$quoterequestItemService.getNotifier($scope);
 
@@ -75,19 +65,8 @@
 
             var mediaType = 'QRMediaItem' ; // <-- Set this value in the upload modal. 
 
-            // Rest value to null before closing modal
-           
-
-           
-
-           
-           // <-- global variable for userid
-             // <-- global variable for company id
-
             formData.append("MediaType", mediaType);
             formData.append("UserId", vm.userId);
-           
-       
 
         }; 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -96,7 +75,6 @@
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         function _onQRDropzoneSuccess(file, response) {
             console.log("DZ Success");
-
 
 
              //capture mediaid into a shared array in this . grab media id each time. 
